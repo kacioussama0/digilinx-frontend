@@ -1,10 +1,5 @@
 <script setup lang="ts">
 
-  import {onAuthStateChanged} from "firebase/auth";
-  import {auth} from "./firebase.js";
-  import {useRouter} from "vue-router";
-
-
   useHead({
     title: 'Digilinx - The Way Of Trust',
     meta: [
@@ -19,17 +14,6 @@
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   })
-
-
-  onAuthStateChanged(auth,(user) => {
-    if(user) {
-      console.log('User is signed in:', user);
-    } else {
-      console.log('No user is signed in, redirecting to login page.');
-    }
-
-  })
-
 
 </script>
 
@@ -47,7 +31,7 @@
 
     <AppHeader/>
 
-      <UMain>
+      <UMain class="bg-blue-100 py-16">
         <NuxtPage />
       </UMain>
 
@@ -56,5 +40,3 @@
   </UApp>
 </template>
 
-<script setup lang="ts">
-</script>

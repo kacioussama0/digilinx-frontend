@@ -2,7 +2,11 @@
 
 import type { NavigationMenuItem } from '@nuxt/ui'
 import LogoDark from "./LogoDark.vue";
+import {signOut} from "firebase/auth";
+import {navigateTo} from "nuxt/app";
 const route = useRoute()
+
+const auth = useAuthStore()
 
 const items = computed<NavigationMenuItem[]>(() => [
   {
@@ -39,10 +43,24 @@ function isDarkMode() {
 }
 
 
+async function logout() {
+  const { $firebaseAuth } = useNuxtApp();
+
+  if(confirm('Are you sure ?? ')) {
+    await signOut($firebaseAuth);
+    navigateTo('/login')
+
+  }
+
+}
+
+
 
 </script>
 
 <template>
+
+
   <UHeader>
     <template #title>
 
@@ -57,7 +75,9 @@ function isDarkMode() {
       <UColorModeButton />
 
 
-        <UButton
+
+
+      <UButton
             label="Login"
             size="lg"
             color="secondary"
@@ -65,12 +85,39 @@ function isDarkMode() {
             variant="solid"
             icon="mdi-user-circle"
             aria-label="Login to Digilinx"
+            v-if="auth.isLoggedIn == false"
         />
 
 
 
+
+
+      <UButton
+            label="Logout"
+            size="lg"
+            color="primary"
+            @click="logout"
+            variant="solid"
+            icon="mdi-arrow-right"
+            aria-label="Logout"
+            v-if="auth.isLoggedIn == true"
+        />
+
+
+      <ULink
+          to="/profile"
+          v-if="auth.isLoggedIn == true"
+      >
+
+        <UAvatar alt="" size="xl" :text="auth.user.displayName[0]"  v-if="auth.isLoggedIn == true"/>
+
+
+      </ULink>
+
+
     </template>
   </UHeader>
+
 </template>
 
 <style scoped>
