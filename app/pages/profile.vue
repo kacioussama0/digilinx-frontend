@@ -66,7 +66,7 @@
 
 <template>
 
-  <UHeader class="h-100 text-light flex items-center content-center bg-primary">
+  <UHeader class="h-50 text-light flex items-center content-center bg-primary">
 
     <template #title>
 
@@ -100,7 +100,7 @@
       </UAlert>
 
 
-      <UPageCard  variant="subtle" title="Account Infomation" v-if="userInfos">
+      <UPageCard  variant="subtle" title="Account Information" v-if="userInfos">
 
 
         <template #body>

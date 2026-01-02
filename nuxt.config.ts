@@ -4,5 +4,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/ui', '@nuxt/image','@pinia/nuxt'],
   css: ['~/assets/css/main.css'],
-
+  ui: {
+    fonts : {
+      sans: 'itfOmniaNaskh',
+    }
+  }
 })
