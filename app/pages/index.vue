@@ -15,9 +15,8 @@ const services = ref([])
 
 <template>
 
-  <UPageSection>
 
-    <UContainer>
+    <UContainer class="mt-16">
 
 
       <UPageCard
@@ -56,7 +55,6 @@ const services = ref([])
     </UContainer>
 
 
-  </UPageSection>
 
 
 
