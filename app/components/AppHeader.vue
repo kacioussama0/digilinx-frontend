@@ -4,6 +4,7 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 import LogoDark from "./LogoDark.vue";
 import {signOut} from "firebase/auth";
 import {navigateTo} from "nuxt/app";
+import {onMounted} from "vue";
 const route = useRoute()
 
 const auth = useAuthStore()
@@ -54,6 +55,24 @@ async function logout() {
 
 }
 
+onMounted(() => {
+
+  const header = document.querySelector('header')
+
+  window.onscroll = function() {
+    if (window.pageYOffset >= header.offsetHeight) {
+      header?.classList.add('shadow-lg');
+
+    } else {
+      header?.classList.remove('shadow-lg');
+
+    }
+  };
+
+})
+
+
+
 
 
 </script>
@@ -61,28 +80,26 @@ async function logout() {
 <template>
 
 
-  <UHeader>
+  <UHeader class="bg-primary border-0 my-0 py-0">
     <template #title>
 
-      <LogoWhite class="h-6 w-auto" v-if="!isDarkMode()" />
-      <LogoDark class="h-6 w-auto" v-else />
+      <LogoDark class="h-8 w-auto"/>
+
     </template>
 
-    <UNavigationMenu :items="items" />
+    <UNavigationMenu variant="solid" class="text-white" :items="items" />
 
     <template #right>
 
-      <UColorModeButton />
-
-
-
+      <UColorModeButton variant="outline" class="rounded-4xl" />
 
       <UButton
             label="Login"
             size="lg"
-            color="secondary"
+            color="light"
+            class="rounded-4xl text-white"
             to="/login"
-            variant="solid"
+            variant="outline"
             icon="mdi-user-circle"
             aria-label="Login to Digilinx"
             v-if="auth.isLoggedIn == false"

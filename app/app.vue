@@ -21,12 +21,12 @@
 <template>
   <UApp class="py-0 my-0">
 
-      <UMarquee
-       reverse
-        class="bg-primary text-white py-2 text-center font-semibold"
-      >
-        <h3 class="fs-1">Digilinx The Way Of Trust</h3>
-      </UMarquee>
+<!--      <UMarquee-->
+<!--       reverse-->
+<!--        class="bg-primary text-white py-2 text-center font-semibold"-->
+<!--      >-->
+<!--        <h3 class="fs-1">Digilinx The Way Of Trust</h3>-->
+<!--      </UMarquee>-->
 
 
     <AppHeader/>

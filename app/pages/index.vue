@@ -2,9 +2,12 @@
 
 import {getServices} from '../firestore/services.js'
 
+
+
 const services = ref([])
 
  onMounted(async () => {
+
   services.value = await getServices()
 
 })
@@ -16,75 +19,70 @@ const services = ref([])
 <template>
 
 
-    <UContainer class="mt-16">
 
+  <UPageSection class="h-[30vh] bg-gradient-to-b from-primary to-95% to-neutral-800 hero">
 
-      <UPageCard
-          variant="outline"
-          orientation="horizontal"
-          class="rounded-xl border-1 border-secondary p-10  gap-10 lg:gap-20 items-center justify-between"
-      >
+    <UContainer class="text-white lg:px-0 flex flex-col items-center">
 
-        <template #body>
-          <h1 class="text-[60px] font-bold">Welcome To Digilinx</h1>
-          <p class="mb-5 text-[24px]">Best Marketplace For Selling And Buying Digital Services</p>
-          <div class="flex ">
-            <UButton
-                label="Buy"
-                size="xl"
-                class="me-2 px-26 py-3 text-2xl cursor-pointer"
-            />
+      <h1 class="text-[60px] font-bold">Welcome To Digilin<span class="text-secondary">x</span></h1>
+      <p class="mb-5 text-[24px]">Best Marketplace For Selling And Buying Digital Services</p>
+      <div class="flex ">
+        <UButton
+            label="Buy"
+            color="secondary"
+            size="xl"
+            class="me-2 px-26 py-3 text-2xl cursor-pointer rounded-4xl"
+        />
 
-            <UButton
-                label="Sell"
-                size="xl"
-                variant="subtle"
-                class="px-16 text-2xl cursor-pointer"
-                color="secondary"
-            />
+        <UButton
+            label="Sell"
+            size="xl"
+            variant="outline"
+            class="px-16 text-2xl cursor-pointer rounded-4xl"
+            color="neutral"
+        />
 
-          </div>
-
-        </template>
-
-        <img src="../assets/imgs/hero.svg">
-
-      </UPageCard>
+      </div>
 
 
     </UContainer>
 
 
+  </UPageSection>
 
 
 
-
-    <UPageSection>
+  <UPageSection class="bg-neutral-800 text-white">
 
     <UContainer>
 
-      <h2 class="text-4xl font-bold mb-16">Our Services</h2>
 
       <UPageGrid
           class="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-4 lg:grid-cols-6 gap-6"
       >
-        <UPageCard
+
+        <div
             v-for="(service, index) in services"
+            :style="{ '--svc': service.color}"
+        >
+
+        <UPageCard
+
             :key="service.id"
             :title="service.name"
             :icon="service.icon"
-            :description="service.description"
             :to="`/services/${service.id}`"
-            spotlight-color="secondary"
-            spotlight
-            :class="`order-[${service.order}] text-center`"
+            class="text-center bg-transparent hover:bg-[var(--svc)] hover:scale-105 transition-all duration-300 ease-in-out"
             :ui = "{
-            leadingIcon: 'size-12',
-            wrapper: `flex flex-col justify-center items-center `,
-
+            root: 'hover:ring-[var(--svc)]',
+            leadingIcon: 'size-12 text-white transition-colors duration-300 ease-in-out',
+            wrapper: `flex flex-col justify-center items-center  `,
+            title: 'text-white   text-xl font-semibold mt-4',
           }"
-            variant="outline"
+            variant="solid"
         />
+
+        </div>
       </UPageGrid>
 
     </UContainer>

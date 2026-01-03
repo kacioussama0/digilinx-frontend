@@ -71,7 +71,7 @@ onMounted(async () => {
              <img :src="category.thumbnail" class="object-center w-100 object-cover h-100">
 
 
-             <div class="w-100 h-100 bg-primary/10 absolute start-0 top-0 z-0"></div>
+             <div class="w-100 h-100 bg-neutral-800/50 absolute start-0 top-0 z-0"></div>
 
 
 
