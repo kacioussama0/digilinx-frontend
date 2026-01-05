@@ -34,15 +34,6 @@ const items = computed<NavigationMenuItem[]>(() => [
 
 ])
 
-function isDarkMode() {
-  const colorMode = useColorMode()
-  if(colorMode.value === 'dark') {
-    return true
-  } else {
-    return false
-  }
-}
-
 
 async function logout() {
   const { $firebaseAuth } = useNuxtApp();
@@ -57,17 +48,7 @@ async function logout() {
 
 onMounted(() => {
 
-  const header = document.querySelector('header')
 
-  window.onscroll = function() {
-    if (window.pageYOffset >= header.offsetHeight) {
-      header?.classList.add('shadow-lg');
-
-    } else {
-      header?.classList.remove('shadow-lg');
-
-    }
-  };
 
 })
 
@@ -80,32 +61,28 @@ onMounted(() => {
 <template>
 
 
-  <UHeader class="bg-primary border-0 my-0 py-0">
+  <UHeader>
     <template #title>
 
-      <LogoDark class="h-8 w-auto"/>
+      <LogoWhite class="h-8 w-auto"/>
 
     </template>
 
-    <UNavigationMenu variant="solid" class="text-white" :items="items" />
+    <UNavigationMenu  :items="items" />
 
     <template #right>
 
-      <UColorModeButton variant="outline" class="rounded-4xl" />
 
       <UButton
             label="Login"
             size="lg"
-            color="light"
-            class="rounded-4xl text-white"
+            class="rounded-2xl px-5"
             to="/login"
             variant="outline"
             icon="mdi-user-circle"
             aria-label="Login to Digilinx"
             v-if="auth.isLoggedIn == false"
         />
-
-
 
 
 

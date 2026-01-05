@@ -1,5 +1,5 @@
 import {db} from "./firestore.js";
-import {collection, getDocs,getDoc,doc,query,where} from "firebase/firestore";
+import {collection, getDocs, getDoc, doc, query, where, setDoc} from "firebase/firestore";
 
 
 const servicesCollection = collection(db, "services");
@@ -31,6 +31,32 @@ export const getService = async (id) => {
 
 
 }
+
+
+// add service
+
+export const addService = async (serviceObj) => {
+  try {
+    const docRef = await setDoc(doc(db, "services", serviceObj.id), {
+      name: serviceObj.name,
+      description: serviceObj.description,
+      icon: serviceObj.icon,
+      color: serviceObj.color,
+      enabled: serviceObj.enabled,
+      featured: serviceObj.enabled,
+    });
+
+
+    return true
+
+
+
+  } catch (error) {
+    console.error("Error adding service:", error);
+
+    return false
+  }
+};
 
 export const getServiceCategories = async (serviceId) => {
   const categoriesRef = collection(db, "categories")

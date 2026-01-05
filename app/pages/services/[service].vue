@@ -30,16 +30,31 @@ onMounted(async () => {
 
   <UHeader
       title=""
-      class="h-50 text-light flex items-center justify-items-center bg-primary mb-16"
+      class="h-50 relative text-light flex items-center justify-items-center bg-gradient-to-t  from-[var(--svc)] to-neutral-900 mb-16"
       :ui = "{root: 'flex justify-center items-center'}"
+      :style="{ '--svc': service.color}"
   >
 
     <template #left>
 
-      <h1 class="text-[40px] font-bold text-white flex items-end justify-center">
-        <UIcon  :name="service.icon" class="size-20 me-5 text-secondary"/>
-        {{service.name}}
-      </h1>
+       <span class="w-[75px] h-[75px] rounded-[50%]  bg-white flex items-center justify-center me-5">
+                  <UIcon  :name="service.icon" :class="`size-10  text-[var(--svc)]`"/>
+       </span>
+
+
+
+        <div class="flex flex-col justify-center items-baseline">
+
+          <h1 class="text-4xl font-bold my-0 text-white">
+            {{service.name}}
+          </h1>
+
+          <p class="text-white mb-0">{{service.description}}</p>
+
+        </div>
+
+
+
 
     </template>
 
@@ -49,29 +64,28 @@ onMounted(async () => {
 
       <UContainer>
 
-       <UPageGrid>
+       <UPageGrid  class="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-4 lg:grid-cols-4 gap-12">
 
          <UCard
              v-if="categories.length"
              v-for="category in categories"
-             class="relative h-[300px]"
+             class="relative h-[180px] rounded-2xl w-full hover:ring-[var(--svc)] hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ease-in-out cursor-pointer"
              :ui = "{
                'body': 'sm:p-0'
              }"
+             :style="{ '--svc': service.color}"
          >
-
-
 
 
            <template #default>
 
 
-             <h3 class="absolute start-1/2 top-1/2 tranform z-10 -translate-x-1/2 -translate-y-1/2 text-white text-5xl font-black ">{{category.name}}</h3>
+             <h3 class="absolute start-1/2 top-1/2 tranform z-10 -translate-x-1/2 -translate-y-1/2 text-white text-3xl font-bold">{{category.name}}</h3>
 
-             <img :src="category.thumbnail" class="object-center w-100 object-cover h-100">
+             <img :src="category.thumbnail" class="object-center w-full object-cover h-100">
 
 
-             <div class="w-100 h-100 bg-neutral-800/50 absolute start-0 top-0 z-0"></div>
+             <div class="w-100 h-100 bg-gradient-to-t  from-[var(--svc)] to-neutral-900 absolute start-0 top-0 z-0"></div>
 
 
 

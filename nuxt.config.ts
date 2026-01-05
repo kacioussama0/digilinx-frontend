@@ -8,5 +8,8 @@ export default defineNuxtConfig({
     fonts : {
       sans: 'itfOmniaNaskh',
     }
+  },
+  colorMode: {
+    preference: 'light'
   }
 })
