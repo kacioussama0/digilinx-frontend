@@ -3,11 +3,11 @@
   import type {FormSubmitEvent, AuthFormField} from '@nuxt/ui'
   import LogoDark from "../components/LogoDark.vue";
   import {signInWithEmailAndPassword} from "firebase/auth";
-  import {auth} from "../firebase.js";
-  import {useRouter} from "vue-router";
+
   import {navigateTo} from "nuxt/app";
 
 
+  const auth = useFirebaseAuth()!
   const toast = useToast()
 
   const fields: AuthFormField[] = [{
@@ -50,8 +50,6 @@
           const errorMessage = error.message;
           console.error('Error signing in:', errorCode, errorMessage);
           toast.add({description: errorCode, color: 'error', icon: 'i-material-symbols-error-outline'})
-
-
         });
 
   }
@@ -61,42 +59,56 @@
 
 <template>
 
-  <UHeader class="h-100 text-light bg-primary">
+  <LogoWhite class="h-16 my-16 object-contain object-center mx-auto"/>
 
-    <template #title>
-
-      <LogoDark class="h-50 object-contain object-center"/>
-
-    </template>
-
-  </UHeader>
-
-  <div class="flex flex-col items-center justify-center p-4 mt-50">
+  <section class="flex flex-col items-center justify-center p-4">
 
 
-    <UPageCard class="w-full max-w-md" variant="subtle">
-
+    <UPageCard class="w-full max-w-md rounded-2xl" variant="subtle" spotlight spotlight-color="secondary">
 
       <UAuthForm
-          title="Login to your account"
+          title="Login"
           :fields="fields"
           :submit="{
             label: 'Login',
-            color: 'primary',
+            color: 'secondary'
 
           }"
           @submit="onSubmit"
+          :ui = "{
+            'footer': 'flex justify-evenly items-center'
+          }"
       >
 
-        <template #footer>
+        <template #footer class="flex ">
 
-          <NuxtLink to="/register" class="text-sm text-primary hover:underline">
-            Don't have an account? Sign up
-          </NuxtLink>
+
+
+          <span class="flex flex-col items-center">
+            <UIcon name="fluent-color:lock-closed-16" size="30" />
+            <NuxtLink to="/register" class="text-sm text-black mt-1">
+                Sign up
+            </NuxtLink>
+          </span>
+
+          <span class="flex flex-col items-center justify-center">
+             <UIcon name="fluent-color:home-16" size="30" />
+             <NuxtLink to="/" class="text-sm text-black mt-1">
+                Return Home
+              </NuxtLink>
+          </span>
+
 
         </template>
 
       </UAuthForm>
     </UPageCard>
-  </div>
+  </section>
 </template>
+
+<style scoped>
+
+
+
+
+</style>

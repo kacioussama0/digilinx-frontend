@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
-import {getServices} from '../firestore/services.js'
+import { collection } from 'firebase/firestore'
+
+
 
 const steps = [
   {
@@ -52,11 +54,15 @@ const features = [
   }
 ]
 
-const services = ref([])
+const db = useFirestore();
+const services = useCollection(collection(db, 'services'));
+
+
+
 
  onMounted(async () => {
 
-  services.value = await getServices()
+
 
 })
 
@@ -125,8 +131,8 @@ const services = ref([])
 
     <UContainer class="py-16">
 
-      <h3 class="text-4xl mb-2 font-bold">Browse Categories</h3>
-      <h5 class="mb-16 text-xl">Find exactly what you need across our service categories</h5>
+      <h3 class="text-4xl mb-2 font-bold">Browse Services</h3>
+      <h5 class="mb-16 text-xl">Find exactly what you need across our services</h5>
 
 
       <UPageGrid

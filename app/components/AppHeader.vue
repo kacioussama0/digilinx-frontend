@@ -1,13 +1,14 @@
 <script setup lang="ts">
 
 import type { NavigationMenuItem } from '@nuxt/ui'
-import LogoDark from "./LogoDark.vue";
 import {signOut} from "firebase/auth";
-import {navigateTo} from "nuxt/app";
-import {onMounted} from "vue";
 const route = useRoute()
 
-const auth = useAuthStore()
+const auth = useFirebaseAuth()
+const user = useCurrentUser();
+
+
+
 
 const items = computed<NavigationMenuItem[]>(() => [
   {
@@ -17,15 +18,17 @@ const items = computed<NavigationMenuItem[]>(() => [
   },
 
   {
-    label: 'About',
-    to: '/about',
-    active: route.path === '/about',
-  },
-  {
     label: 'Services',
     to: '/services',
     active: route.path === '/services',
   },
+
+  {
+    label: 'Stores',
+    to: '/stores',
+    active: route.path === '/stores',
+  },
+
   {
     label: 'Contact',
     to: '/contact',
@@ -35,23 +38,27 @@ const items = computed<NavigationMenuItem[]>(() => [
 ])
 
 
-async function logout() {
-  const { $firebaseAuth } = useNuxtApp();
+const toast = useToast()
 
-  if(confirm('Are you sure ?? ')) {
-    await signOut($firebaseAuth);
-    navigateTo('/login')
+function logout() {
 
-  }
+  signOut(auth).then(()=> {
+
+    toast.add({
+      description: 'Successfully logout',
+      color: 'success',
+      icon: 'i-material-symbols-check-circle-outline'
+    })
+
+    navigateTo('/')
+
+  }).catch(error => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    toast.add({description: errorCode, color: 'error', icon: 'i-material-symbols-error-outline'})
+  })
 
 }
-
-onMounted(() => {
-
-
-
-})
-
 
 
 
@@ -72,16 +79,16 @@ onMounted(() => {
 
     <template #right>
 
-
       <UButton
             label="Login"
             size="lg"
+            color="secondary"
             class="rounded-2xl px-5"
             to="/login"
-            variant="outline"
-            icon="mdi-user-circle"
+            variant="solid"
+            icon="mdi-user"
             aria-label="Login to Digilinx"
-            v-if="auth.isLoggedIn == false"
+            v-if="!user"
         />
 
 
@@ -94,16 +101,16 @@ onMounted(() => {
             variant="solid"
             icon="mdi-arrow-right"
             aria-label="Logout"
-            v-if="auth.isLoggedIn == true"
+            v-if="user"
         />
 
 
       <ULink
-          to="/profile"
-          v-if="auth.isLoggedIn == true"
+          to="/dashboard/profile"
+          v-if="user"
       >
 
-        <UAvatar alt="" size="xl" :text="auth.user.displayName[0]"  v-if="auth.isLoggedIn == true"/>
+        <UAvatar alt="" size="xl"  :text="user.displayName ?? 'DG'"  v-if="user"/>
 
 
       </ULink>

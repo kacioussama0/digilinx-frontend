@@ -1,11 +1,12 @@
 <script setup>
 import { z } from 'zod'
 import { createUserWithEmailAndPassword ,updateProfile ,sendEmailVerification} from "firebase/auth";
-import { auth,app } from "../firebase.js";
 import { doc, serverTimestamp, setDoc,collection ,getFirestore} from 'firebase/firestore'
 
 import {navigateTo} from "nuxt/app";
+import {useCurrentUser} from "vuefire";
 
+const auth = useFirebaseAuth();
 
 const registerSchema = z.object({
 
@@ -105,17 +106,17 @@ async function onSubmit({data}) {
 
   try {
     const cred = await createUserWithEmailAndPassword(auth, data.email , data.password);
-    const user = cred.user
+    const user = useCurrentUser()
 
     await updateProfile(user, {
       displayName: `${data.firstName} ${data.lastName}`
     })
 
-    const db = getFirestore(app)
 
-    await setDoc(doc(db, 'users', user.uid), {
-      uid: user.uid,
-      email: user.email,
+
+    await setDoc(doc(db, 'users', user.value.uid), {
+      uid: user.value.uid,
+      email: user.value.email,
       firstName: data.firstName,
       lastName: data.lastName,
       phone: data.phone,
@@ -126,7 +127,7 @@ async function onSubmit({data}) {
       updatedAt: serverTimestamp()
     }, { merge: true })
 
-    await sendEmailVerification(user)
+    await sendEmailVerification(user.va)
 
     toast.add({  description: 'Successfully registered' ,color: 'success',icon: 'i-material-symbols-check-circle-outline'})
     setTimeout(() => {

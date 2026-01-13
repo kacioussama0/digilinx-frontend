@@ -1,24 +1,33 @@
 <script setup>
 
-import {getService, getServiceCategories, getServices} from "~/firestore/services.js";
+import {collection, doc, query, where,orderBy} from 'firebase/firestore'
 
 const route = useRoute()
 
-const serviceId = route.params.service
+const db = useFirestore()
 
-const service = ref({})
-
-const categories = ref([])
+const serviceId = computed(() => route.params.service)
 
 
-onMounted(async () => {
-  service.value = await getService(serviceId)
 
-  categories.value = await getServiceCategories(serviceId)
+const categoriesQuery = computed(() =>
+    serviceId.value
+        ? query(
+            collection(db, 'categories'),
+            where('serviceIds', 'array-contains', serviceId.value),
+            where('isActive','==',true),
+            orderBy('name','asc'),
+        )
+        : null
+)
 
-})
 
+const serviceRef = computed(() =>
+    serviceId.value ? doc(db, 'services', serviceId.value) : null
+)
 
+const service = useDocument(serviceRef)
+const categories = useCollection(categoriesQuery)
 
 
 
@@ -33,6 +42,7 @@ onMounted(async () => {
       class="h-50 relative text-light flex items-center justify-items-center bg-gradient-to-t  from-[var(--svc)] to-neutral-900 mb-16"
       :ui = "{root: 'flex justify-center items-center'}"
       :style="{ '--svc': service.color}"
+      v-if="service"
   >
 
     <template #left>
@@ -60,6 +70,8 @@ onMounted(async () => {
 
   </UHeader>
 
+  <USkeleton  class="h-[150px] mb-16" v-else />
+
 
 
       <UContainer>
@@ -69,7 +81,7 @@ onMounted(async () => {
          <UCard
              v-if="categories.length"
              v-for="category in categories"
-             class="relative h-[180px] rounded-2xl w-full hover:ring-[var(--svc)] hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ease-in-out cursor-pointer"
+             class="relative h-[150px] rounded-2xl w-full hover:ring-[var(--svc)] hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ease-in-out cursor-pointer"
              :ui = "{
                'body': 'sm:p-0'
              }"
@@ -80,13 +92,16 @@ onMounted(async () => {
            <template #default>
 
 
-             <h3 class="absolute start-1/2 top-1/2 tranform z-10 -translate-x-1/2 -translate-y-1/2 text-white text-3xl font-bold">{{category.name}}</h3>
+             <div class="absolute start-1/2 top-1/2 tranform z-10 -translate-x-1/2 -translate-y-1/2 text-center">
+               <h3 class="text-white text-3xl font-bold">{{category.name}}</h3>
+               <UBadge color="neutral" variant="subtle" size="md"  class="font-bold rounded-full">0 Offers</UBadge>
 
-             <img :src="category.thumbnail" class="object-center w-full object-cover h-100">
+             </div>
+
+<!--             <img :src="category.thumbnail" class="object-top  w-full h-100">-->
 
 
-             <div class="w-100 h-100 bg-gradient-to-t  from-[var(--svc)] to-neutral-900 absolute start-0 top-0 z-0"></div>
-
+             <div class="w-100 h-100 bg-gradient-to-t  from-[var(--svc)] to-neutral-900 hover:bg-gradient-to-l  absolute start-0 top-0 z-0"></div>
 
 
 
@@ -97,7 +112,7 @@ onMounted(async () => {
 
          <UCard
              v-for="i in 10"
-             class="relative h-[300px]"
+             class="relative h-[180px] mb-16"
              :ui = "{
                'body': 'sm:p-0'
              }"
@@ -105,11 +120,9 @@ onMounted(async () => {
          >
 
 
-
-
            <template #default>
 
-             <USkeleton class="h-[300px] w-full" />
+             <USkeleton class="h-[180px] w-full" />
 
            </template>
 
